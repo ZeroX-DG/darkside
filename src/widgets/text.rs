@@ -15,6 +15,7 @@ pub enum TextEffect {
   Normal,
 }
 
+/// Create new text widget
 pub fn new_text(text: &str, x: i32, y: i32) -> Text {
   Text {
     data: String::from(text),
@@ -25,6 +26,7 @@ pub fn new_text(text: &str, x: i32, y: i32) -> Text {
   }
 }
 
+/// Set the text effect to display for text widget
 pub fn set_text_effects(text: Text, effects: Vec<TextEffect>) -> Text {
   Text {
     data: text.data,
@@ -35,6 +37,7 @@ pub fn set_text_effects(text: Text, effects: Vec<TextEffect>) -> Text {
   }
 }
 
+/// Center the text base on its' parent
 pub fn center_text(text: Text, center_h: bool, center_v: bool) -> Text {
   let win = match text.window {
     Some(w) => w,
@@ -73,6 +76,8 @@ fn translate_text_effect(effect: &TextEffect) -> attr_t {
   }
 }
 
+
+/// Render the text widget
 pub fn render_text(text: &Text) {
   let win = match text.window {
     Some(w) => w,

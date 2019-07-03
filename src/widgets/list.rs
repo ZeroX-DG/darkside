@@ -17,6 +17,7 @@ pub enum TextOverflow {
   Hidden,
 }
 
+/// Create a new list widget
 pub fn new_list(x: i32, y: i32, w: i32, h: i32, items: Vec<String>) -> List {
   let win = newwin(h, w, y, x);
   let inner_window = newwin(h - 2, w - 2, y + 1, x + 1);
@@ -33,6 +34,7 @@ pub fn new_list(x: i32, y: i32, w: i32, h: i32, items: Vec<String>) -> List {
   }
 }
 
+/// Set text overflow effect for the list
 pub fn set_list_text_overflow(list: List, overflow: TextOverflow) -> List {
   List {
     items: list.items,
@@ -47,6 +49,7 @@ pub fn set_list_text_overflow(list: List, overflow: TextOverflow) -> List {
   }
 }
 
+/// Allow the list item to fill the list width
 pub fn set_list_fill_width(list: List, is_fill: bool) -> List {
   List {
     items: list.items,
@@ -61,6 +64,7 @@ pub fn set_list_fill_width(list: List, is_fill: bool) -> List {
   }
 }
 
+/// Select the next item in list
 pub fn move_next_list_item(list: List) -> List {
   let is_in_range = list.selected_index < list.items.len() as i32 - 1;
   let new_index = if is_in_range {
@@ -87,6 +91,7 @@ pub fn move_next_list_item(list: List) -> List {
   }
 }
 
+/// Select the previous item in list
 pub fn move_prev_list_item(list: List) -> List {
   let is_in_range = list.selected_index > 0;
   let new_index = if is_in_range {
@@ -113,10 +118,12 @@ pub fn move_prev_list_item(list: List) -> List {
   }
 }
 
+/// Get current selected item
 pub fn get_selected_list_item(list: List) -> String {
   list.items[list.selected_index as usize].clone()
 }
 
+/// Render the list
 pub fn render_list(list: &List) {
   let win = list.inner_window;
   wclear(win);
@@ -138,7 +145,7 @@ pub fn render_list(list: &List) {
     };
     let display_item = if list.fill_width {
       let new_item = if is_overflow {
-        let take_length = (inner_window_width - 3) as usize;
+        let take_length = (inner_window_width - overflow.len() as i32) as usize;
         item.clone().chars().take(take_length).collect::<String>()
       } else {
         item.clone()
@@ -151,7 +158,7 @@ pub fn render_list(list: &List) {
       format!("{}{}{}", new_item, " ".repeat(spaces as usize), overflow)
     } else {
       let new_item = if is_overflow {
-        let take_length = (inner_window_width - 3) as usize;
+        let take_length = (inner_window_width - overflow.len() as i32) as usize;
         item.clone().chars().take(take_length).collect::<String>()
       } else {
         item.clone()
