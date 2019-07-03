@@ -23,9 +23,9 @@ fn main() {
   let mut instruction = new_text("Use <- to focus left list and -> for right list", 10, 12);
   instruction = set_text_effects(instruction, vec![TextEffect::Bold]);
 
-  list_1 = list_fill_width(list_1, true);
-  list_2 = list_fill_width(list_2, true);
-  list_2 = list_text_overflow(list_2, TextOverflow::Ellipsis);
+  list_1 = set_list_fill_width(list_1, true);
+  list_2 = set_list_fill_width(list_2, true);
+  list_2 = set_list_text_overflow(list_2, TextOverflow::Ellipsis);
 
   let _j_key = translate_key("j");
   let _k_key = translate_key("k");
@@ -41,15 +41,15 @@ fn main() {
     let ch = wait_for_key();
     if ch == _k_key || ch == up_key {
       if current_list == 1 {
-        list_1 = move_prev_list(list_1);
+        list_1 = move_prev_list_item(list_1);
       } else {
-        list_2 = move_prev_list(list_2);
+        list_2 = move_prev_list_item(list_2);
       }
     } else if ch == _j_key || ch == down_key {
       if current_list == 1 {
-        list_1 = move_next_list(list_1);
+        list_1 = move_next_list_item(list_1);
       } else {
-        list_2 = move_next_list(list_2);
+        list_2 = move_next_list_item(list_2);
       }
     } else if ch == left_key {
       current_list = 1;

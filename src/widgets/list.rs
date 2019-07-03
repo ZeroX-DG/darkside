@@ -33,7 +33,7 @@ pub fn new_list(x: i32, y: i32, w: i32, h: i32, items: Vec<String>) -> List {
   }
 }
 
-pub fn list_text_overflow(list: List, overflow: TextOverflow) -> List {
+pub fn set_list_text_overflow(list: List, overflow: TextOverflow) -> List {
   List {
     items: list.items,
     fill_width: list.fill_width,
@@ -47,7 +47,7 @@ pub fn list_text_overflow(list: List, overflow: TextOverflow) -> List {
   }
 }
 
-pub fn list_fill_width(list: List, is_fill: bool) -> List {
+pub fn set_list_fill_width(list: List, is_fill: bool) -> List {
   List {
     items: list.items,
     fill_width: is_fill,
@@ -61,7 +61,7 @@ pub fn list_fill_width(list: List, is_fill: bool) -> List {
   }
 }
 
-pub fn move_next_list(list: List) -> List {
+pub fn move_next_list_item(list: List) -> List {
   let is_in_range = list.selected_index < list.items.len() as i32 - 1;
   let new_index = if is_in_range {
     list.selected_index + 1
@@ -87,7 +87,7 @@ pub fn move_next_list(list: List) -> List {
   }
 }
 
-pub fn move_prev_list(list: List) -> List {
+pub fn move_prev_list_item(list: List) -> List {
   let is_in_range = list.selected_index > 0;
   let new_index = if is_in_range {
     list.selected_index - 1
@@ -111,6 +111,10 @@ pub fn move_prev_list(list: List) -> List {
     scroll_top: new_scroll_top,
     text_overflow: list.text_overflow,
   }
+}
+
+pub fn get_selected_list_item(list: List) -> String {
+  list.items[list.selected_index as usize].clone()
 }
 
 pub fn render_list(list: &List) {
