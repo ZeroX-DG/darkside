@@ -9,6 +9,12 @@ pub struct List {
   height: i32,
   selected_index: i32,
   scroll_top: i32,
+  text_overflow: TextOverflow,
+}
+
+pub enum TextOverflow {
+  Ellipsis,
+  Hidden,
 }
 
 pub fn new_list(x: i32, y: i32, w: i32, h: i32, items: Vec<String>) -> List {
@@ -23,6 +29,21 @@ pub fn new_list(x: i32, y: i32, w: i32, h: i32, items: Vec<String>) -> List {
     height: h,
     selected_index: -1,
     scroll_top: 0,
+    text_overflow: TextOverflow::Ellipsis,
+  }
+}
+
+pub fn list_text_overflow(list: List, overflow: TextOverflow) -> List {
+  List {
+    items: list.items,
+    fill_width: list.fill_width,
+    window: list.window,
+    inner_window: list.inner_window,
+    width: list.width,
+    height: list.height,
+    selected_index: list.selected_index,
+    scroll_top: list.scroll_top,
+    text_overflow: overflow,
   }
 }
 
@@ -36,6 +57,7 @@ pub fn list_fill_width(list: List, is_fill: bool) -> List {
     height: list.height,
     selected_index: list.selected_index,
     scroll_top: list.scroll_top,
+    text_overflow: list.text_overflow,
   }
 }
 
@@ -61,6 +83,7 @@ pub fn move_next_list(list: List) -> List {
     height: list.height,
     selected_index: new_index,
     scroll_top: new_scroll_top,
+    text_overflow: list.text_overflow,
   }
 }
 
@@ -86,6 +109,7 @@ pub fn move_prev_list(list: List) -> List {
     height: list.height,
     selected_index: new_index,
     scroll_top: new_scroll_top,
+    text_overflow: list.text_overflow,
   }
 }
 
@@ -93,13 +117,42 @@ pub fn render_list(list: &List) {
   let win = list.inner_window;
   wclear(win);
   box_(list.window, 0, 0);
+  let inner_window_width = list.width - 4;
   let mut line = list.scroll_top;
   for item in &list.items {
+    let item_width = item.chars().count() as i32;
+    let is_overflow = item_width > inner_window_width;
+    let overflow = match list.text_overflow {
+      TextOverflow::Ellipsis => {
+        if is_overflow {
+          "..."
+        } else {
+          ""
+        }
+      }
+      TextOverflow::Hidden => "",
+    };
     let display_item = if list.fill_width {
-      let spaces = list.width - item.chars().count() as i32 - 4;
-      format!("{}{}", item.clone(), " ".repeat(spaces as usize))
+      let new_item = if is_overflow {
+        let take_length = (inner_window_width - 3) as usize;
+        item.clone().chars().take(take_length).collect::<String>()
+      } else {
+        item.clone()
+      };
+      let spaces = if is_overflow {
+        0
+      } else {
+        inner_window_width - item_width
+      };
+      format!("{}{}{}", new_item, " ".repeat(spaces as usize), overflow)
     } else {
-      item.clone()
+      let new_item = if is_overflow {
+        let take_length = (inner_window_width - 3) as usize;
+        item.clone().chars().take(take_length).collect::<String>()
+      } else {
+        item.clone()
+      };
+      format!("{}{}", new_item, overflow)
     };
     if list.selected_index + list.scroll_top == line {
       wattr_on(win, A_REVERSE());

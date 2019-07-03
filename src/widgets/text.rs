@@ -9,15 +9,15 @@ pub struct Text {
 }
 
 pub enum TextEffect {
-  BOLD,
-  ITALIC,
-  UNDERLINE,
-  NORMAL,
+  Bold,
+  Italic,
+  Underline,
+  Normal,
 }
 
-pub fn new_text(text: String, x: i32, y: i32) -> Text {
+pub fn new_text(text: &str, x: i32, y: i32) -> Text {
   Text {
-    data: text,
+    data: String::from(text),
     effects: vec![],
     window: None,
     x: x,
@@ -66,14 +66,14 @@ pub fn center_text(text: Text, center_h: bool, center_v: bool) -> Text {
 
 fn translate_text_effect(effect: &TextEffect) -> attr_t {
   match effect {
-    TextEffect::BOLD => A_BOLD(),
-    TextEffect::ITALIC => A_ITALIC(),
-    TextEffect::UNDERLINE => A_UNDERLINE(),
-    TextEffect::NORMAL => A_NORMAL(),
+    TextEffect::Bold => A_BOLD(),
+    TextEffect::Italic => A_ITALIC(),
+    TextEffect::Underline => A_UNDERLINE(),
+    TextEffect::Normal => A_NORMAL(),
   }
 }
 
-pub fn render_text(text: Text) {
+pub fn render_text(text: &Text) {
   let win = match text.window {
     Some(w) => w,
     None => stdscr(),

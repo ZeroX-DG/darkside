@@ -1,46 +1,60 @@
 extern crate darkside;
 
 use darkside::list::*;
+use darkside::text::*;
 use darkside::*;
 
 fn main() {
   new_app();
-  let mut list = new_list(
-    10,
-    2,
-    20,
-    10,
-    vec![
-      String::from("item 1"),
-      String::from("item 2"),
-      String::from("item 3"),
-      String::from("item 4"),
-      String::from("item 5"),
-      String::from("item 6"),
-      String::from("item 7"),
-      String::from("item 8"),
-      String::from("item 9"),
-      String::from("item 10"),
-      String::from("item 11"),
-      String::from("item 12"),
-      String::from("item 13"),
-      String::from("item 14"),
-    ],
-  );
+  let mut str_vec = vec![];
+  let mut current_list = 1;
+  for i in 1..21 {
+    str_vec.push(format!("item {}", i));
+  }
+  let mut list_1 = new_list(10, 2, 20, 10, str_vec);
+  let item_vec = vec![
+    String::from("This is long"),
+    String::from("This is longer"),
+    String::from("This is even longer"),
+    String::from("This is the longest one"),
+  ];
+  let mut list_2 = new_list(30, 2, 20, 10, item_vec);
 
-  list = list_fill_width(list, true);
+  let mut instruction = new_text("Use <- to focus left list and -> for right list", 10, 12);
+  instruction = set_text_effects(instruction, vec![TextEffect::Bold]);
+
+  list_1 = list_fill_width(list_1, true);
+  list_2 = list_fill_width(list_2, true);
+  list_2 = list_text_overflow(list_2, TextOverflow::Ellipsis);
+
+  let _j_key = translate_key("j");
+  let _k_key = translate_key("k");
+  let up_key = translate_key("arrow_up");
+  let down_key = translate_key("arrow_down");
+  let left_key = translate_key("arrow_left");
+  let right_key = translate_key("arrow_right");
 
   loop {
-    render_list(&list);
+    render_list(&list_1);
+    render_list(&list_2);
+    render_text(&instruction);
     let ch = wait_for_key();
-    let _j_key = translate_key("j");
-    let _k_key = translate_key("k");
-    let up_key = translate_key("arrow_up");
-    let down_key = translate_key("arrow_down");
     if ch == _k_key || ch == up_key {
-      list = move_prev_list(list);
+      if current_list == 1 {
+        list_1 = move_prev_list(list_1);
+      } else {
+        list_2 = move_prev_list(list_2);
+      }
     } else if ch == _j_key || ch == down_key {
-      list = move_next_list(list);
+      if current_list == 1 {
+        list_1 = move_next_list(list_1);
+      } else {
+        list_2 = move_next_list(list_2);
+      }
+    } else if ch == left_key {
+      current_list = 1;
+    } else if ch == right_key {
+      current_list = 2;
     }
   }
 }
