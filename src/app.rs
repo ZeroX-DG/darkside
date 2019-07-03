@@ -4,8 +4,9 @@ pub fn new_app() {
   initscr();
   noecho();
   keypad(stdscr(), true);
+  refresh();
 }
 
-pub fn pause_app() {
-  getch();
+pub fn wait_for_key() -> i32 {
+  getch()
 }

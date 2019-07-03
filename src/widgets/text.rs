@@ -73,7 +73,7 @@ fn translate_text_effect(effect: &TextEffect) -> attr_t {
   }
 }
 
-pub fn render(text: Text) {
+pub fn render_text(text: Text) {
   let win = match text.window {
     Some(w) => w,
     None => stdscr(),
