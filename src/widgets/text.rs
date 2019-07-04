@@ -28,13 +28,9 @@ pub fn new_text(text: &str, x: i32, y: i32) -> Text {
 
 /// Set the text effect to display for text widget
 pub fn set_text_effects(text: Text, effects: Vec<TextEffect>) -> Text {
-  Text {
-    data: text.data,
-    effects: effects,
-    window: text.window,
-    x: text.x,
-    y: text.y,
-  }
+  let mut update_text = text;
+  update_text.effects = effects;
+  update_text
 }
 
 /// Center the text base on its' parent
@@ -58,13 +54,10 @@ pub fn center_text(text: Text, center_h: bool, center_v: bool) -> Text {
     text.y
   };
 
-  Text {
-    data: text.data,
-    effects: text.effects,
-    window: text.window,
-    x: new_x,
-    y: new_y,
-  }
+  let mut update_text = text;
+  update_text.x = new_x;
+  update_text.y = new_y;
+  update_text
 }
 
 fn translate_text_effect(effect: &TextEffect) -> attr_t {

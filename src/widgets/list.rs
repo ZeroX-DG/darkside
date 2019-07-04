@@ -38,34 +38,16 @@ pub fn new_list(x: i32, y: i32, w: i32, h: i32, items: Vec<String>) -> List {
 
 /// Set text overflow effect for the list
 pub fn set_list_text_overflow(list: List, overflow: TextOverflow) -> List {
-  List {
-    items: list.items,
-    fill_width: list.fill_width,
-    window: list.window,
-    inner_window: list.inner_window,
-    width: list.width,
-    height: list.height,
-    selected_index: list.selected_index,
-    scroll_top: list.scroll_top,
-    text_overflow: overflow,
-    title: list.title,
-  }
+  let mut update_list = list;
+  update_list.text_overflow = overflow;
+  update_list
 }
 
 /// Allow the list item to fill the list width
 pub fn set_list_fill_width(list: List, is_fill: bool) -> List {
-  List {
-    items: list.items,
-    fill_width: is_fill,
-    window: list.window,
-    inner_window: list.inner_window,
-    width: list.width,
-    height: list.height,
-    selected_index: list.selected_index,
-    scroll_top: list.scroll_top,
-    text_overflow: list.text_overflow,
-    title: list.title,
-  }
+  let mut update_list = list;
+  update_list.fill_width = is_fill;
+  update_list
 }
 
 /// Select the next item in list
@@ -82,18 +64,10 @@ pub fn move_next_list_item(list: List) -> List {
   } else {
     list.scroll_top
   };
-  List {
-    items: list.items,
-    fill_width: list.fill_width,
-    window: list.window,
-    inner_window: list.inner_window,
-    width: list.width,
-    height: list.height,
-    selected_index: new_index,
-    scroll_top: new_scroll_top,
-    text_overflow: list.text_overflow,
-    title: list.title,
-  }
+  let mut update_list = list;
+  update_list.selected_index = new_index;
+  update_list.scroll_top = new_scroll_top;
+  update_list
 }
 
 /// Select the previous item in list
@@ -110,33 +84,16 @@ pub fn move_prev_list_item(list: List) -> List {
   } else {
     list.scroll_top
   };
-  List {
-    items: list.items,
-    fill_width: list.fill_width,
-    window: list.window,
-    inner_window: list.inner_window,
-    width: list.width,
-    height: list.height,
-    selected_index: new_index,
-    scroll_top: new_scroll_top,
-    text_overflow: list.text_overflow,
-    title: list.title,
-  }
+  let mut update_list = list;
+  update_list.selected_index = new_index;
+  update_list.scroll_top = new_scroll_top;
+  update_list
 }
 
 pub fn set_list_title(list: List, title: &str) -> List {
-  List {
-    items: list.items,
-    fill_width: list.fill_width,
-    window: list.window,
-    inner_window: list.inner_window,
-    width: list.width,
-    height: list.height,
-    selected_index: list.selected_index,
-    scroll_top: list.scroll_top,
-    text_overflow: list.text_overflow,
-    title: Some(String::from(title)),
-  }
+  let mut update_list = list;
+  update_list.title = Some(String::from(title));
+  update_list
 }
 
 /// Get current selected item
