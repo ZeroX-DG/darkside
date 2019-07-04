@@ -10,6 +10,7 @@ pub struct List {
   selected_index: i32,
   scroll_top: i32,
   text_overflow: TextOverflow,
+  title: Option<String>,
 }
 
 pub enum TextOverflow {
@@ -31,6 +32,7 @@ pub fn new_list(x: i32, y: i32, w: i32, h: i32, items: Vec<String>) -> List {
     selected_index: -1,
     scroll_top: 0,
     text_overflow: TextOverflow::Ellipsis,
+    title: None,
   }
 }
 
@@ -46,6 +48,7 @@ pub fn set_list_text_overflow(list: List, overflow: TextOverflow) -> List {
     selected_index: list.selected_index,
     scroll_top: list.scroll_top,
     text_overflow: overflow,
+    title: list.title,
   }
 }
 
@@ -61,6 +64,7 @@ pub fn set_list_fill_width(list: List, is_fill: bool) -> List {
     selected_index: list.selected_index,
     scroll_top: list.scroll_top,
     text_overflow: list.text_overflow,
+    title: list.title,
   }
 }
 
@@ -88,6 +92,7 @@ pub fn move_next_list_item(list: List) -> List {
     selected_index: new_index,
     scroll_top: new_scroll_top,
     text_overflow: list.text_overflow,
+    title: list.title,
   }
 }
 
@@ -115,6 +120,22 @@ pub fn move_prev_list_item(list: List) -> List {
     selected_index: new_index,
     scroll_top: new_scroll_top,
     text_overflow: list.text_overflow,
+    title: list.title,
+  }
+}
+
+pub fn set_list_title(list: List, title: &str) -> List {
+  List {
+    items: list.items,
+    fill_width: list.fill_width,
+    window: list.window,
+    inner_window: list.inner_window,
+    width: list.width,
+    height: list.height,
+    selected_index: list.selected_index,
+    scroll_top: list.scroll_top,
+    text_overflow: list.text_overflow,
+    title: Some(String::from(title)),
   }
 }
 
@@ -130,6 +151,9 @@ pub fn render_list(list: &List) {
   box_(list.window, 0, 0);
   let inner_window_width = list.width - 4;
   let mut line = list.scroll_top;
+  if let Some(title) = &list.title {
+    mvwaddstr(list.window, 0, 1, &title);
+  }
   for item in &list.items {
     let item_width = item.chars().count() as i32;
     let is_overflow = item_width > inner_window_width;

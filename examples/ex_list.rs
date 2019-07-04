@@ -26,6 +26,7 @@ fn main() {
   list_1 = set_list_fill_width(list_1, true);
   list_2 = set_list_fill_width(list_2, true);
   list_2 = set_list_text_overflow(list_2, TextOverflow::Ellipsis);
+  list_2 = set_list_title(list_2, "List");
 
   let _j_key = translate_key("j");
   let _k_key = translate_key("k");
