@@ -69,7 +69,6 @@ fn translate_text_effect(effect: &TextEffect) -> attr_t {
   }
 }
 
-
 /// Render the text widget
 pub fn render_text(text: &Text) {
   let win = match text.window {

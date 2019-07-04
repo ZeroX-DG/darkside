@@ -1,4 +1,3 @@
-use super::Parent;
 use ncurses::*;
 
 pub struct Tag {
@@ -15,12 +14,6 @@ pub fn new_tag(content: &str, x: i32, y: i32) -> Tag {
     x: x,
     y: y,
   }
-}
-
-pub fn set_tag_parent(tag: Tag, parent: &Parent) -> Tag {
-  let mut update_tag = tag;
-  update_tag.window = Some(parent.get_win());
-  update_tag
 }
 
 pub fn render_tag(tag: &Tag) {
