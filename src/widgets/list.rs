@@ -97,8 +97,8 @@ pub fn set_list_title(list: List, title: &str) -> List {
 }
 
 /// Get current selected item
-pub fn get_selected_list_item(list: List) -> String {
-  list.items[list.selected_index as usize].clone()
+pub fn get_list_selected_index(list: List) -> i32 {
+  list.selected_index
 }
 
 /// Render the list
