@@ -152,7 +152,9 @@ pub fn render_list(list: &List) {
   let inner_window_width = list.width - 4;
   let mut line = list.scroll_top;
   if let Some(title) = &list.title {
+    wattr_on(list.window, A_BOLD());
     mvwaddstr(list.window, 0, 1, &title);
+    wattr_off(list.window, A_BOLD());
   }
   for item in &list.items {
     let item_width = item.chars().count() as i32;
