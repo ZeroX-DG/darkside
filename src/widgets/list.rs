@@ -29,7 +29,7 @@ pub fn new_list(x: i32, y: i32, w: i32, h: i32, items: Vec<String>) -> List {
     inner_window: inner_window,
     width: w,
     height: h,
-    selected_index: -1,
+    selected_index: 0,
     scroll_top: 0,
     text_overflow: TextOverflow::Ellipsis,
     title: None,
@@ -97,7 +97,7 @@ pub fn set_list_title(list: List, title: &str) -> List {
 }
 
 /// Get current selected item
-pub fn get_list_selected_index(list: List) -> i32 {
+pub fn get_list_selected_index(list: &List) -> i32 {
   list.selected_index
 }
 

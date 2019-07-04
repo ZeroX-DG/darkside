@@ -11,14 +11,14 @@ fn main() {
   for i in 1..21 {
     str_vec.push(format!("item {}", i));
   }
-  let mut list_1 = new_list(10, 2, 20, 10, str_vec);
+  let mut list_1 = new_list(10, 2, 20, 10, str_vec.clone());
   let item_vec = vec![
     String::from("This is long"),
     String::from("This is longer"),
     String::from("This is even longer"),
     String::from("This is the longest one"),
   ];
-  let mut list_2 = new_list(30, 2, 20, 10, item_vec);
+  let mut list_2 = new_list(30, 2, 20, 10, item_vec.clone());
 
   let mut instruction = new_text("Use <- to focus left list and -> for right list", 10, 12);
   instruction = set_text_effects(instruction, vec![TextEffect::Bold]);
@@ -28,12 +28,13 @@ fn main() {
   list_2 = set_list_text_overflow(list_2, TextOverflow::Ellipsis);
   list_2 = set_list_title(list_2, "List");
 
-  let _j_key = translate_key("j");
-  let _k_key = translate_key("k");
-  let up_key = translate_key("arrow_up");
-  let down_key = translate_key("arrow_down");
-  let left_key = translate_key("arrow_left");
-  let right_key = translate_key("arrow_right");
+  let _j_key = translate_key('j');
+  let _k_key = translate_key('k');
+  let up_key = KEY_UP;
+  let down_key = KEY_DOWN;
+  let left_key = KEY_LEFT;
+  let right_key = KEY_RIGHT;
+  let enter_key = KEY_RETURN;
 
   loop {
     render_list(&list_1);
@@ -56,6 +57,17 @@ fn main() {
       current_list = 1;
     } else if ch == right_key {
       current_list = 2;
+    } else if ch == enter_key {
+      let result_1 = str_vec
+        .get(get_list_selected_index(&list_1) as usize)
+        .unwrap();
+      let result_text_1 = new_text(&format!("Selected in left list: {}", result_1), 10, 13);
+      let result_2 = item_vec
+        .get(get_list_selected_index(&list_2) as usize)
+        .unwrap();
+      let result_text_2 = new_text(&format!("Selected in right list: {}", result_2), 10, 14);
+      render_text(&result_text_1);
+      render_text(&result_text_2);
     }
   }
 }
