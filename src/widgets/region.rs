@@ -16,6 +16,12 @@ pub fn new_region<'a>(x: i32, y: i32, w: i32, h: i32, title: Option<&'a str>, bo
     }
 }
 
+pub fn set_region_title<'a>(region: Region<'a>, title: &'a str) -> Region<'a> {
+    let mut update_region = region;
+    update_region.title = Some(title);
+    update_region
+}
+
 pub fn render_region(region: &Region) {
     wclear(region.window);
     match &region.border {
