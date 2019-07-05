@@ -1,3 +1,4 @@
+use super::region::Region;
 use ncurses::*;
 
 pub struct Text {
@@ -61,6 +62,12 @@ pub fn center_text(text: Text, center_h: bool, center_v: bool) -> Text {
   update_text
 }
 
+pub fn set_text_region(text: Text, region: &Region) -> Text {
+  let mut update_text = text;
+  update_text.window = Some(region.window);
+  update_text
+}
+
 fn translate_text_effect(effect: &TextEffect) -> attr_t {
   match effect {
     TextEffect::Bold => A_BOLD(),
@@ -86,4 +93,5 @@ pub fn render_text(text: &Text) {
     let a_effect = translate_text_effect(effect);
     wattr_off(win, a_effect);
   }
+  wrefresh(win);
 }

@@ -2,7 +2,7 @@ use super::Border;
 use ncurses::*;
 
 pub struct Region<'a> {
-    window: WINDOW,
+    pub window: WINDOW,
     title: Option<&'a str>,
     border: Border
 }
