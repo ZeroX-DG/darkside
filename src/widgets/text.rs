@@ -35,6 +35,12 @@ pub fn set_text_effects(text: Text, effects: Vec<TextEffect>) -> Text {
   update_text
 }
 
+pub fn set_text_content(text: Text, content: &str) -> Text {
+  let mut update_text = text;
+  update_text.data = String::from(content);
+  update_text
+}
+
 /// Center the text base on its' parent
 pub fn center_text(text: Text, center_h: bool, center_v: bool) -> Text {
   let win = match text.window {

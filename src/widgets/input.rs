@@ -25,6 +25,16 @@ pub fn set_input_value(input: Input, value: String) -> Input {
   update_input
 }
 
+pub fn set_input_obscure(input: Input, obscure: bool) -> Input {
+  let mut update_input = input;
+  update_input.obscure = obscure;
+  update_input
+}
+
+pub fn get_input_value(input: &Input) -> String {
+  input.value.clone()
+}
+
 pub fn add_input_char(input: Input, input_char: char) -> Input {
   let mut update_input = input;
   update_input.value.push(input_char);
