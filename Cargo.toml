@@ -1,8 +1,17 @@
 [package]
 name = "darkside"
 version = "1.0.0"
-authors = ["Nguyễn Việt Hưng <hunggarena12@gmail.com>"]
+authors = ["Viet Hung Nguyen <hunggarena12@gmail.com>"]
 edition = "2018"
+description = "A TUI-kit for Rust based on ncurses-rs"
+repository = "https://github.com/ZeroX-DG/darkside"
+homepage = "https://github.com/ZeroX-DG/darkside"
+keywords = ["ncurses","TUI","darkside"]
+license = "MIT"
+categories = ["command-line-interface", "command-line-utilities"]
 
 [dependencies]
 ncurses = "*"
+
+[lib]
+name = "darkside"
