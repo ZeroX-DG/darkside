@@ -123,47 +123,64 @@ pub fn render_list(list: &List) {
   wclear(win);
   let mut line = list.scroll_top;
   for item in &list.items {
-    let item_width = item.chars().count() as i32;
-    let is_overflow = item_width > list.width;
-    let overflow = match list.text_overflow {
-      TextOverflow::Ellipsis => {
-        if is_overflow {
-          "..."
-        } else {
-          ""
+    let mut display_lines: Vec<String> = vec![];
+    for item_line in item.lines() {
+      let item_str = String::from(item_line);
+      let item_width = item_str.chars().count() as i32;
+      let is_overflow = item_width > list.width;
+      let overflow = match list.text_overflow {
+        TextOverflow::Ellipsis => {
+          if is_overflow {
+            "..."
+          } else {
+            ""
+          }
         }
-      }
-      TextOverflow::Hidden => "",
-    };
-    let display_item = if list.fill_width {
-      let new_item = if is_overflow {
-        let take_length = (list.width - overflow.len() as i32) as usize;
-        item.clone().chars().take(take_length).collect::<String>()
-      } else {
-        item.clone()
+        TextOverflow::Hidden => "",
       };
-      let spaces = if is_overflow {
-        0
+      let display_item = if list.fill_width {
+        let new_item = if is_overflow {
+          let take_length = (list.width - overflow.len() as i32) as usize;
+          item_str
+            .clone()
+            .chars()
+            .take(take_length)
+            .collect::<String>()
+        } else {
+          item_str.clone()
+        };
+        let spaces = if is_overflow {
+          0
+        } else {
+          list.width - item_width
+        };
+        format!("{}{}{}", new_item, " ".repeat(spaces as usize), overflow)
       } else {
-        list.width - item_width
+        let new_item = if is_overflow {
+          let take_length = (list.width - overflow.len() as i32) as usize;
+          item_str
+            .clone()
+            .chars()
+            .take(take_length)
+            .collect::<String>()
+        } else {
+          item_str.clone()
+        };
+        format!("{}{}", new_item, overflow)
       };
-      format!("{}{}{}", new_item, " ".repeat(spaces as usize), overflow)
-    } else {
-      let new_item = if is_overflow {
-        let take_length = (list.width - overflow.len() as i32) as usize;
-        item.clone().chars().take(take_length).collect::<String>()
-      } else {
-        item.clone()
-      };
-      format!("{}{}", new_item, overflow)
-    };
+      display_lines.push(display_item);
+    }
     let offset = list.item_height + list.item_spacing;
-    if list.selected_index * offset + list.scroll_top == line {
-      wattr_on(win, A_REVERSE());
-      mvwaddstr(win, line, 0, &display_item);
-      wattr_off(win, A_REVERSE());
-    } else {
-      mvwaddstr(win, line, 0, &display_item);
+    let mut sub_line = line;
+    for display_line in display_lines {
+      if list.selected_index * offset + list.scroll_top == line {
+        wattr_on(win, A_REVERSE());
+        mvwaddstr(win, sub_line, 0, &display_line);
+        wattr_off(win, A_REVERSE());
+      } else {
+        mvwaddstr(win, sub_line, 0, &display_line);
+      }
+      sub_line += 1;
     }
     line += offset;
   }
