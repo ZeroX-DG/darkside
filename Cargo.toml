@@ -11,7 +11,7 @@ license = "MIT"
 categories = ["command-line-interface", "command-line-utilities"]
 
 [dependencies]
-ncurses = "*"
+ncurses = "5.99.0"
 
 [lib]
 name = "darkside"
