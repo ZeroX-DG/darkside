@@ -11,6 +11,8 @@ pub struct List {
   scroll_top: i32,
   text_overflow: TextOverflow,
   title: Option<String>,
+  item_height: i32,
+  item_spacing: i32,
 }
 
 pub enum TextOverflow {
@@ -33,6 +35,8 @@ pub fn new_list(x: i32, y: i32, w: i32, h: i32, items: Vec<String>) -> List {
     scroll_top: 0,
     text_overflow: TextOverflow::Ellipsis,
     title: None,
+    item_height: 1,
+    item_spacing: 0,
   }
 }
 
@@ -58,9 +62,10 @@ pub fn move_next_list_item(list: List) -> List {
   } else {
     list.selected_index
   };
-  let offset = list.selected_index + list.scroll_top;
-  let new_scroll_top = if offset > list.height - 4 && is_in_range {
-    list.scroll_top - 1
+  let offset_extra = list.item_height + list.item_spacing;
+  let offset = list.selected_index * offset_extra + list.scroll_top;
+  let new_scroll_top = if offset > list.height - (4 + offset_extra) && is_in_range {
+    list.scroll_top - offset_extra
   } else {
     list.scroll_top
   };
@@ -78,9 +83,10 @@ pub fn move_prev_list_item(list: List) -> List {
   } else {
     list.selected_index
   };
-  let offset = list.selected_index + list.scroll_top - 1;
+  let offset_extra = list.item_height + list.item_spacing;
+  let offset = list.selected_index * offset_extra + list.scroll_top - 1;
   let new_scroll_top = if offset < 0 && is_in_range {
-    list.scroll_top + 1
+    list.scroll_top + offset_extra
   } else {
     list.scroll_top
   };
@@ -93,6 +99,18 @@ pub fn move_prev_list_item(list: List) -> List {
 pub fn set_list_title(list: List, title: &str) -> List {
   let mut update_list = list;
   update_list.title = Some(String::from(title));
+  update_list
+}
+
+pub fn set_list_item_height(list: List, height: i32) -> List {
+  let mut update_list = list;
+  update_list.item_height = height;
+  update_list
+}
+
+pub fn set_list_item_spacing(list: List, spacing: i32) -> List {
+  let mut update_list = list;
+  update_list.item_spacing = spacing;
   update_list
 }
 
@@ -148,14 +166,15 @@ pub fn render_list(list: &List) {
       };
       format!("{}{}", new_item, overflow)
     };
-    if list.selected_index + list.scroll_top == line {
+    let offset = list.item_height + list.item_spacing;
+    if list.selected_index * offset + list.scroll_top == line {
       wattr_on(win, A_REVERSE());
       mvwaddstr(win, line, 1, &display_item);
       wattr_off(win, A_REVERSE());
     } else {
       mvwaddstr(win, line, 1, &display_item);
     }
-    line += 1;
+    line += offset;
   }
   wrefresh(list.window);
   wrefresh(win);
