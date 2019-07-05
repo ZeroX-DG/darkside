@@ -35,6 +35,7 @@ pub fn set_text_effects(text: Text, effects: Vec<TextEffect>) -> Text {
   update_text
 }
 
+/// Set the text content for text widget
 pub fn set_text_content(text: Text, content: &str) -> Text {
   let mut update_text = text;
   update_text.data = String::from(content);
@@ -68,6 +69,7 @@ pub fn center_text(text: Text, center_h: bool, center_v: bool) -> Text {
   update_text
 }
 
+/// Set the text region, in other words, using a region as the text parent
 pub fn set_text_region(text: Text, region: &Region) -> Text {
   let mut update_text = text;
   update_text.window = Some(region.window);
