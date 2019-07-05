@@ -13,6 +13,7 @@ pub enum TextEffect {
   Italic,
   Underline,
   Normal,
+  Highlighted
 }
 
 /// Create new text widget
@@ -66,6 +67,7 @@ fn translate_text_effect(effect: &TextEffect) -> attr_t {
     TextEffect::Italic => A_ITALIC(),
     TextEffect::Underline => A_UNDERLINE(),
     TextEffect::Normal => A_NORMAL(),
+    TextEffect::Highlighted => A_REVERSE(),
   }
 }
 
