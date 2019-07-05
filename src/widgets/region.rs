@@ -5,6 +5,7 @@ pub struct Region<'a> {
   pub window: WINDOW,
   title: Option<&'a str>,
   border: Border,
+  visible: bool,
 }
 
 /// Create a new region
@@ -21,6 +22,7 @@ pub fn new_region<'a>(
     window: window,
     title: title,
     border: border,
+    visible: true,
   }
 }
 
@@ -34,12 +36,16 @@ pub fn set_region_title<'a>(region: Region<'a>, title: &'a str) -> Region<'a> {
 /// Render the region widget
 pub fn render_region(region: &Region) {
   wclear(region.window);
+  if !region.visible {
+    return;
+  }
   match &region.border {
     Border::All => box_(region.window, 0, 0),
     Border::Left => wborder(region.window, 0, 32, 32, 32, 32, 32, 32, 32),
     Border::Right => wborder(region.window, 32, 0, 32, 32, 32, 32, 32, 32),
     Border::Top => wborder(region.window, 32, 32, 0, 32, 32, 32, 32, 32),
     Border::Bottom => wborder(region.window, 32, 32, 32, 0, 32, 32, 32, 32),
+    Border::None => 0
   };
   if let Some(title) = region.title {
     wattr_on(region.window, A_BOLD());

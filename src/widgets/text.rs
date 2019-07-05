@@ -7,6 +7,7 @@ pub struct Text {
   window: Option<WINDOW>,
   x: i32,
   y: i32,
+  visible: bool
 }
 
 pub enum TextEffect {
@@ -25,6 +26,7 @@ pub fn new_text(text: &str, x: i32, y: i32) -> Text {
     window: None,
     x: x,
     y: y,
+    visible: true
   }
 }
 
@@ -76,6 +78,13 @@ pub fn set_text_region(text: Text, region: &Region) -> Text {
   update_text
 }
 
+/// Set the visible
+pub fn set_text_visible(text: Text, visible: bool) -> Text {
+  let mut update_text = text;
+  update_text.visible = visible;
+  update_text
+}
+
 fn translate_text_effect(effect: &TextEffect) -> attr_t {
   match effect {
     TextEffect::Bold => A_BOLD(),
@@ -92,6 +101,9 @@ pub fn render_text(text: &Text) {
     Some(w) => w,
     None => stdscr(),
   };
+  if !text.visible {
+    return;
+  }
   for effect in &text.effects {
     let a_effect = translate_text_effect(effect);
     wattr_on(win, a_effect);

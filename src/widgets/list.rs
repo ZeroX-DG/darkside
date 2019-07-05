@@ -11,6 +11,7 @@ pub struct List {
   text_overflow: TextOverflow,
   item_height: i32,
   item_spacing: i32,
+  visible: bool,
 }
 
 pub enum TextOverflow {
@@ -32,6 +33,7 @@ pub fn new_list(x: i32, y: i32, w: i32, h: i32, items: Vec<String>) -> List {
     text_overflow: TextOverflow::Ellipsis,
     item_height: 1,
     item_spacing: 0,
+    visible: true,
   }
 }
 
@@ -105,6 +107,13 @@ pub fn set_list_item_spacing(list: List, spacing: i32) -> List {
   update_list
 }
 
+/// Set the list visibility
+pub fn set_list_visible(list: List, visible: bool) -> List {
+  let mut update_list = list;
+  update_list.visible = visible;
+  update_list
+}
+
 /// Set the list items
 pub fn set_list_items(list: List, items: Vec<String>) -> List {
   let mut update_list = list;
@@ -121,6 +130,9 @@ pub fn get_list_selected_index(list: &List) -> i32 {
 pub fn render_list(list: &List) {
   let win = list.window;
   wclear(win);
+  if !list.visible {
+    return;
+  }
   let mut line = list.scroll_top;
   for item in &list.items {
     let mut display_lines: Vec<String> = vec![];

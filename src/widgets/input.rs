@@ -5,7 +5,8 @@ pub struct Input<'a> {
   obscure: bool,
   value: String,
   window: WINDOW,
-  width: i32
+  width: i32,
+  visible: bool,
 }
 
 
@@ -18,6 +19,7 @@ pub fn new_input<'a>(x: i32, y: i32, w: i32, prompt: &'a str, obscure: bool) -> 
     value: String::from(""),
     window: win,
     width: w,
+    visible: true,
   }
 }
 
@@ -32,6 +34,13 @@ pub fn set_input_value(input: Input, value: String) -> Input {
 pub fn set_input_obscure(input: Input, obscure: bool) -> Input {
   let mut update_input = input;
   update_input.obscure = obscure;
+  update_input
+}
+
+/// Specify if the input value should be displayed or not
+pub fn set_input_visible(input: Input, visible: bool) -> Input {
+  let mut update_input = input;
+  update_input.visible = visible;
   update_input
 }
 
@@ -70,6 +79,10 @@ pub fn render_input(input: &Input) {
   let win = input.window;
   wclear(win);
 
+  if !input.visible {
+    return;
+  }
+
   let prompt_width = input.prompt.chars().count();
 
   wattr_on(win, A_BOLD());
@@ -82,7 +95,12 @@ pub fn render_input(input: &Input) {
   let value = if input.obscure {
     "*".repeat(value_length)
   } else {
-    input.value.clone().chars().take(value_width as usize).collect::<String>()
+    input
+      .value
+      .clone()
+      .chars()
+      .take(value_width as usize)
+      .collect::<String>()
   };
   mvwaddstr(win, 0, prompt_width as i32 + 2, &value);
   wrefresh(input.window);
