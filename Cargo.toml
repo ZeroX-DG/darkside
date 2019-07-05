@@ -10,8 +10,9 @@ keywords = ["ncurses","TUI","darkside"]
 license = "MIT"
 categories = ["command-line-interface", "command-line-utilities"]
 
-[dependencies]
-ncurses = "5.99.0"
+[dependencies.ncurses]
+version = "5.99.0"
+features = ["wide"]
 
 [lib]
 name = "darkside"
