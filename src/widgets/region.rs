@@ -7,6 +7,7 @@ pub struct Region<'a> {
     border: Border
 }
 
+/// Create a new region
 pub fn new_region<'a>(x: i32, y: i32, w: i32, h: i32, title: Option<&'a str>, border: Border) -> Region<'a> {
     let window = newwin(h, w, y, x);
     Region {
@@ -16,12 +17,14 @@ pub fn new_region<'a>(x: i32, y: i32, w: i32, h: i32, title: Option<&'a str>, bo
     }
 }
 
+/// Set a region title and region the region
 pub fn set_region_title<'a>(region: Region<'a>, title: &'a str) -> Region<'a> {
     let mut update_region = region;
     update_region.title = Some(title);
     update_region
 }
 
+/// Render the region widget
 pub fn render_region(region: &Region) {
     wclear(region.window);
     match &region.border {

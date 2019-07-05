@@ -8,6 +8,8 @@ pub struct Input<'a> {
   width: i32
 }
 
+
+/// Create a new input
 pub fn new_input<'a>(x: i32, y: i32, w: i32, prompt: &'a str, obscure: bool) -> Input<'a> {
   let win = newwin(1, w, y, x);
   Input {
@@ -19,28 +21,33 @@ pub fn new_input<'a>(x: i32, y: i32, w: i32, prompt: &'a str, obscure: bool) -> 
   }
 }
 
+/// Set the input value
 pub fn set_input_value(input: Input, value: String) -> Input {
   let mut update_input = input;
   update_input.value = value;
   update_input
 }
 
+/// Specify if the input value should be obscure or not
 pub fn set_input_obscure(input: Input, obscure: bool) -> Input {
   let mut update_input = input;
   update_input.obscure = obscure;
   update_input
 }
 
+/// Return the current input value
 pub fn get_input_value(input: &Input) -> String {
   input.value.clone()
 }
 
+/// Add a new char to the end of the input value
 pub fn add_input_char(input: Input, input_char: char) -> Input {
   let mut update_input = input;
   update_input.value.push(input_char);
   update_input
 }
 
+/// Remove the last char from the input value
 pub fn remove_input_last_char(input: Input) -> Input {
   let mut update_input = input;
   let char_count: i32 = update_input.value.chars().count() as i32;
@@ -51,6 +58,7 @@ pub fn remove_input_last_char(input: Input) -> Input {
   update_input
 }
 
+/// Render the input widget
 pub fn render_input(input: &Input) {
   let win = input.window;
   wclear(win);

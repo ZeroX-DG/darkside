@@ -91,12 +91,14 @@ pub fn move_prev_list_item(list: List) -> List {
   update_list
 }
 
+/// Set the list item height
 pub fn set_list_item_height(list: List, height: i32) -> List {
   let mut update_list = list;
   update_list.item_height = height;
   update_list
 }
 
+/// Set the list item spacing
 pub fn set_list_item_spacing(list: List, spacing: i32) -> List {
   let mut update_list = list;
   update_list.item_spacing = spacing;
