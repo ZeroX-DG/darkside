@@ -105,6 +105,13 @@ pub fn set_list_item_spacing(list: List, spacing: i32) -> List {
   update_list
 }
 
+/// Set the list items
+pub fn set_list_items(list: List, items: Vec<String>) -> List {
+  let mut update_list = list;
+  update_list.items = items;
+  update_list
+}
+
 /// Get current selected item
 pub fn get_list_selected_index(list: &List) -> i32 {
   list.selected_index

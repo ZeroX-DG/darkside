@@ -14,7 +14,7 @@ pub enum TextEffect {
   Italic,
   Underline,
   Normal,
-  Highlighted
+  Highlighted,
 }
 
 /// Create new text widget
