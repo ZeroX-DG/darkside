@@ -23,3 +23,11 @@ pub fn get_term_size() -> (i32, i32) {
   getmaxyx(stdscr(), &mut y, &mut x);
   (x, y)
 }
+
+pub fn refresh_app() {
+  refresh();
+}
+
+pub fn clear_term() {
+  clear();
+}
