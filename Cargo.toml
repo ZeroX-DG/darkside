@@ -1,6 +1,6 @@
 [package]
 name = "darkside"
-version = "1.0.0"
+version = "1.0.1"
 authors = ["Viet Hung Nguyen <hunggarena12@gmail.com>"]
 edition = "2018"
 description = "A TUI-kit for Rust based on ncurses-rs"
