@@ -35,6 +35,13 @@ pub fn set_input_obscure(input: Input, obscure: bool) -> Input {
   update_input
 }
 
+/// Set new prompt for input
+pub fn set_input_prompt<'a>(input: Input<'a>, prompt: &'a str) -> Input<'a> {
+  let mut update_input = input;
+  update_input.prompt = prompt;
+  update_input
+}
+
 /// Return the current input value
 pub fn get_input_value(input: &Input) -> String {
   input.value.clone()
