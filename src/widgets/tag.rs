@@ -31,6 +31,7 @@ pub fn render_tag(tag: &Tag) {
   };
 
   if !tag.visible {
+    wrefresh(win);
     return;
   }
 

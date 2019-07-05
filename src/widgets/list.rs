@@ -131,6 +131,7 @@ pub fn render_list(list: &List) {
   let win = list.window;
   wclear(win);
   if !list.visible {
+    wrefresh(win);
     return;
   }
   let mut line = list.scroll_top;

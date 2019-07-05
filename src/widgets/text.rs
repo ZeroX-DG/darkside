@@ -102,6 +102,7 @@ pub fn render_text(text: &Text) {
     None => stdscr(),
   };
   if !text.visible {
+    wrefresh(win);
     return;
   }
   for effect in &text.effects {

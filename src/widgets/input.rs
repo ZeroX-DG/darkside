@@ -80,6 +80,7 @@ pub fn render_input(input: &Input) {
   wclear(win);
 
   if !input.visible {
+    wrefresh(input.window);
     return;
   }
 

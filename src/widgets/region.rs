@@ -37,6 +37,7 @@ pub fn set_region_title<'a>(region: Region<'a>, title: &'a str) -> Region<'a> {
 pub fn render_region(region: &Region) {
   wclear(region.window);
   if !region.visible {
+    wrefresh(region.window);
     return;
   }
   match &region.border {
