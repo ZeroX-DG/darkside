@@ -4,13 +4,11 @@ pub struct List {
   items: Vec<String>,
   fill_width: bool,
   window: WINDOW,
-  inner_window: WINDOW,
   width: i32,
   height: i32,
   selected_index: i32,
   scroll_top: i32,
   text_overflow: TextOverflow,
-  title: Option<String>,
   item_height: i32,
   item_spacing: i32,
 }
@@ -23,18 +21,15 @@ pub enum TextOverflow {
 /// Create a new list widget
 pub fn new_list(x: i32, y: i32, w: i32, h: i32, items: Vec<String>) -> List {
   let win = newwin(h, w, y, x);
-  let inner_window = newwin(h - 2, w - 2, y + 1, x + 1);
   List {
     items: items,
     fill_width: false,
     window: win,
-    inner_window: inner_window,
     width: w,
     height: h,
     selected_index: 0,
     scroll_top: 0,
     text_overflow: TextOverflow::Ellipsis,
-    title: None,
     item_height: 1,
     item_spacing: 0,
   }
@@ -64,7 +59,7 @@ pub fn move_next_list_item(list: List) -> List {
   };
   let offset_extra = list.item_height + list.item_spacing;
   let offset = list.selected_index * offset_extra + list.scroll_top;
-  let new_scroll_top = if offset > list.height - (4 + offset_extra) && is_in_range {
+  let new_scroll_top = if offset > list.height - (1 + offset_extra) && is_in_range {
     list.scroll_top - offset_extra
   } else {
     list.scroll_top
@@ -96,12 +91,6 @@ pub fn move_prev_list_item(list: List) -> List {
   update_list
 }
 
-pub fn set_list_title(list: List, title: &str) -> List {
-  let mut update_list = list;
-  update_list.title = Some(String::from(title));
-  update_list
-}
-
 pub fn set_list_item_height(list: List, height: i32) -> List {
   let mut update_list = list;
   update_list.item_height = height;
@@ -121,19 +110,12 @@ pub fn get_list_selected_index(list: &List) -> i32 {
 
 /// Render the list
 pub fn render_list(list: &List) {
-  let win = list.inner_window;
+  let win = list.window;
   wclear(win);
-  box_(list.window, 0, 0);
-  let inner_window_width = list.width - 4;
   let mut line = list.scroll_top;
-  if let Some(title) = &list.title {
-    wattr_on(list.window, A_BOLD());
-    mvwaddstr(list.window, 0, 1, &title);
-    wattr_off(list.window, A_BOLD());
-  }
   for item in &list.items {
     let item_width = item.chars().count() as i32;
-    let is_overflow = item_width > inner_window_width;
+    let is_overflow = item_width > list.width;
     let overflow = match list.text_overflow {
       TextOverflow::Ellipsis => {
         if is_overflow {
@@ -146,7 +128,7 @@ pub fn render_list(list: &List) {
     };
     let display_item = if list.fill_width {
       let new_item = if is_overflow {
-        let take_length = (inner_window_width - overflow.len() as i32) as usize;
+        let take_length = (list.width - overflow.len() as i32) as usize;
         item.clone().chars().take(take_length).collect::<String>()
       } else {
         item.clone()
@@ -154,12 +136,12 @@ pub fn render_list(list: &List) {
       let spaces = if is_overflow {
         0
       } else {
-        inner_window_width - item_width
+        list.width - item_width
       };
       format!("{}{}{}", new_item, " ".repeat(spaces as usize), overflow)
     } else {
       let new_item = if is_overflow {
-        let take_length = (inner_window_width - overflow.len() as i32) as usize;
+        let take_length = (list.width - overflow.len() as i32) as usize;
         item.clone().chars().take(take_length).collect::<String>()
       } else {
         item.clone()
@@ -169,10 +151,10 @@ pub fn render_list(list: &List) {
     let offset = list.item_height + list.item_spacing;
     if list.selected_index * offset + list.scroll_top == line {
       wattr_on(win, A_REVERSE());
-      mvwaddstr(win, line, 1, &display_item);
+      mvwaddstr(win, line, 0, &display_item);
       wattr_off(win, A_REVERSE());
     } else {
-      mvwaddstr(win, line, 1, &display_item);
+      mvwaddstr(win, line, 0, &display_item);
     }
     line += offset;
   }
