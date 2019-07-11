@@ -1,5 +1,6 @@
 use ncurses::*;
 
+#[derive(Clone)]
 pub struct Input<'a> {
   prompt: &'a str,
   obscure: bool,
@@ -90,9 +91,13 @@ pub fn render_input(input: &Input) {
   mvwaddstr(win, 0, 0, input.prompt);
   wattr_off(win, A_BOLD());
 
-  mvwaddstr(win, 0, prompt_width as i32, ": ");
   let value_width = input.width - prompt_width as i32 - 2;
   let value_length = input.value.chars().count();
+
+  if prompt_width > 0 {
+    mvwaddstr(win, 0, prompt_width as i32, ": ");
+  }
+
   let value = if input.obscure {
     "*".repeat(value_length)
   } else {

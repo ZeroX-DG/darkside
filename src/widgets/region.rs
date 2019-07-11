@@ -1,6 +1,7 @@
 use super::Border;
 use ncurses::*;
 
+#[derive(Clone)]
 pub struct Region<'a> {
   pub window: WINDOW,
   title: Option<&'a str>,

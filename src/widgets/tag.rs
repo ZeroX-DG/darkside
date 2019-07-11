@@ -1,5 +1,6 @@
 use ncurses::*;
 
+#[derive(Clone)]
 pub struct Tag {
   content: String,
   window: Option<WINDOW>,

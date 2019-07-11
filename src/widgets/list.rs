@@ -1,5 +1,6 @@
 use ncurses::*;
 
+#[derive(Clone)]
 pub struct List {
   items: Vec<String>,
   fill_width: bool,
@@ -14,6 +15,7 @@ pub struct List {
   visible: bool,
 }
 
+#[derive(Clone)]
 pub enum TextOverflow {
   Ellipsis,
   Hidden,

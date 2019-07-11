@@ -1,6 +1,7 @@
 use super::region::Region;
 use ncurses::*;
 
+#[derive(Clone)]
 pub struct Text {
   data: String,
   effects: Vec<TextEffect>,
@@ -10,6 +11,7 @@ pub struct Text {
   visible: bool
 }
 
+#[derive(Clone)]
 pub enum TextEffect {
   Bold,
   Italic,
