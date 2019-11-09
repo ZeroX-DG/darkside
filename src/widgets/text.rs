@@ -1,120 +1,81 @@
-use super::region::Region;
-use ncurses::*;
+use super::{BaseWidget, Location, Renderable, Size};
+use ncurses::{attr_off, attr_on, attr_t, mvwaddstr};
 
-#[derive(Clone)]
 pub struct Text {
-  data: String,
-  effects: Vec<TextEffect>,
-  window: Option<WINDOW>,
-  x: i32,
-  y: i32,
-  visible: bool
+    base: BaseWidget,
+    content: String,
+    effects: Vec<TextEffect>,
 }
 
-#[derive(Clone)]
 pub enum TextEffect {
-  Bold,
-  Italic,
-  Underline,
-  Normal,
-  Highlighted,
+    Bold,
+    Underline,
+    Italic,
 }
 
-/// Create new text widget
-pub fn new_text(text: &str, x: i32, y: i32) -> Text {
-  Text {
-    data: String::from(text),
-    effects: vec![],
-    window: None,
-    x: x,
-    y: y,
-    visible: true
-  }
+impl Text {
+    pub fn new(location: Location) -> Self {
+        let render_size = Size {
+            height: 0,
+            width: 0,
+        };
+        Text {
+            base: BaseWidget::new(location, render_size),
+            content: String::new(),
+            effects: Vec::new(),
+        }
+    }
+
+    pub fn effects(mut self, effects: Vec<TextEffect>) -> Self {
+        self.effects = effects;
+        self
+    }
+
+    pub fn content(mut self, text: String) -> Self {
+        let height = text.lines().count() as u16;
+        let width = text.lines().max_by_key(|l| l.len()).unwrap().len() as u16;
+        let size = Size { width, height };
+        self.base.size = size;
+        self.content = text;
+        self
+    }
+
+    pub fn build(self) -> Self {
+        self
+    }
 }
 
-/// Set the text effect to display for text widget
-pub fn set_text_effects(text: Text, effects: Vec<TextEffect>) -> Text {
-  let mut update_text = text;
-  update_text.effects = effects;
-  update_text
+fn text_effect_to_attribute(effect: &TextEffect) -> attr_t {
+    match effect {
+        TextEffect::Bold => ncurses::A_BOLD(),
+        TextEffect::Italic => ncurses::A_ITALIC(),
+        TextEffect::Underline => ncurses::A_UNDERLINE(),
+    }
 }
 
-/// Set the text content for text widget
-pub fn set_text_content(text: Text, content: &str) -> Text {
-  let mut update_text = text;
-  update_text.data = String::from(content);
-  update_text
-}
-
-/// Center the text base on its' parent
-pub fn center_text(text: Text, center_h: bool, center_v: bool) -> Text {
-  let win = match text.window {
-    Some(w) => w,
-    None => stdscr(),
-  };
-
-  let new_x = if center_h {
-    let win_w = getmaxx(win);
-    (win_w - text.data.chars().count() as i32) / 2
-  } else {
-    text.x
-  };
-
-  let new_y = if center_v {
-    let win_h = getmaxy(win);
-    (win_h - text.data.lines().count() as i32) / 2
-  } else {
-    text.y
-  };
-
-  let mut update_text = text;
-  update_text.x = new_x;
-  update_text.y = new_y;
-  update_text
-}
-
-/// Set the text region, in other words, using a region as the text parent
-pub fn set_text_region(text: Text, region: &Region) -> Text {
-  let mut update_text = text;
-  update_text.window = Some(region.window);
-  update_text
-}
-
-/// Set the visible
-pub fn set_text_visible(text: Text, visible: bool) -> Text {
-  let mut update_text = text;
-  update_text.visible = visible;
-  update_text
-}
-
-fn translate_text_effect(effect: &TextEffect) -> attr_t {
-  match effect {
-    TextEffect::Bold => A_BOLD(),
-    TextEffect::Italic => A_ITALIC(),
-    TextEffect::Underline => A_UNDERLINE(),
-    TextEffect::Normal => A_NORMAL(),
-    TextEffect::Highlighted => A_REVERSE(),
-  }
-}
-
-/// Render the text widget
-pub fn render_text(text: &Text) {
-  let win = match text.window {
-    Some(w) => w,
-    None => stdscr(),
-  };
-  if !text.visible {
-    wrefresh(win);
-    return;
-  }
-  for effect in &text.effects {
-    let a_effect = translate_text_effect(effect);
-    wattr_on(win, a_effect);
-  }
-  mvwaddstr(win, text.y, text.x, &text.data);
-  for effect in &text.effects {
-    let a_effect = translate_text_effect(effect);
-    wattr_off(win, a_effect);
-  }
-  wrefresh(win);
+impl Renderable for Text {
+    fn render(&self, window: ncurses::WINDOW) {
+        let position = &self.base.position;
+        let size = &self.base.size;
+        let renderable_text = self
+            .content
+            .lines()
+            .take(size.height as usize)
+            .map(|l| l[0..size.width as usize].to_string())
+            .collect::<String>();
+        for effect in self.effects.iter() {
+            let attr = text_effect_to_attribute(effect);
+            attr_on(attr);
+        }
+        mvwaddstr(
+            window,
+            position.x as i32,
+            position.y as i32,
+            &renderable_text,
+        );
+        for effect in self.effects.iter() {
+            let attr = text_effect_to_attribute(effect);
+            attr_off(attr);
+        }
+    }
 }
