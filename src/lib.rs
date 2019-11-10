@@ -19,11 +19,7 @@ impl<R: Renderable> App<R> {
         let window = initscr();
         refresh();
         App {
-            window: widgets::Window {
-                children: Vec::new(),
-                border: widgets::window::WindowBorder::NoBorder,
-                window
-            }
+            window: widgets::Window::from(window)
         }
     }
 
