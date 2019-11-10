@@ -14,8 +14,9 @@ I fell in love with TUI-app since I started to use i3wm since they are extremely
 - [x] List
 - [ ] Overflow container (used to contain overflowed widgets and allow scroll)
 - [ ] Menu (dropdown and horizontal)
-- [ ] Text editor with highlighting
+- [ ] Text editor with syntax highlighting
 - [ ] Colors support
+- [ ] Component support (combine many widgets into 1 component to reuse)
 
 ## Examples
 
