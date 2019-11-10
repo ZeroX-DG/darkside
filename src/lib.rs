@@ -1,6 +1,6 @@
 pub mod widgets;
 
-use ncurses::{initscr, refresh, endwin};
+use ncurses::{initscr, refresh, endwin, LcCategory, setlocale};
 use widgets::Renderable;
 
 pub struct App<R: Renderable> {
@@ -14,6 +14,8 @@ pub enum ControlFlow {
 
 impl<R: Renderable> App<R> {
     pub fn new() -> App<R> {
+        let locale_conf = LcCategory::all;
+        setlocale(locale_conf, "en_US.UTF-8");
         let window = initscr();
         refresh();
         App {

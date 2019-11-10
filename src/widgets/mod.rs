@@ -1,11 +1,14 @@
 use ncurses::WINDOW;
 
 pub mod text;
-mod util;
 pub mod window;
+pub mod list;
+
+mod util;
 
 pub use text::Text;
 pub use window::Window;
+pub use list::List;
 
 pub struct BaseWidget {
     position: Location,

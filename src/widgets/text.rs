@@ -32,11 +32,18 @@ impl Text {
     }
 
     pub fn content(mut self, text: String) -> Self {
-        let height = text.lines().count() as u16;
-        let width = text.lines().max_by_key(|l| l.len()).unwrap().len() as u16;
-        let size = Size { width, height };
-        self.base.size = size;
+        if self.base.size.width == 0 || self.base.size.height == 0 {
+            let height = text.lines().count() as u16;
+            let width = text.lines().max_by_key(|l| l.len()).unwrap().len() as u16;
+            let size = Size { width, height };
+            self.base.size = size;
+        }
         self.content = text;
+        self
+    }
+
+    pub fn size(mut self, size: Size) -> Self {
+        self.base.size = size;
         self
     }
 
