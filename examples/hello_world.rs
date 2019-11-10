@@ -16,6 +16,7 @@ fn main() {
             TextEffect::Bold,
             TextEffect::Italic,
             TextEffect::Underline,
+            TextEffect::Dim
         ])
         .build();
 

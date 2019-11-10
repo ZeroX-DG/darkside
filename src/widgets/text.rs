@@ -11,6 +11,8 @@ pub enum TextEffect {
     Bold,
     Underline,
     Italic,
+    Standout,
+    Dim,
 }
 
 impl Text {
@@ -54,9 +56,11 @@ impl Text {
 
 fn text_effect_to_attribute(effect: &TextEffect) -> attr_t {
     match effect {
-        TextEffect::Bold => ncurses::A_BOLD(),
-        TextEffect::Italic => ncurses::A_ITALIC(),
+        TextEffect::Bold      => ncurses::A_BOLD(),
+        TextEffect::Italic    => ncurses::A_ITALIC(),
         TextEffect::Underline => ncurses::A_UNDERLINE(),
+        TextEffect::Standout  => ncurses::A_STANDOUT(),
+        TextEffect::Dim       => ncurses::A_DIM(),
     }
 }
 
