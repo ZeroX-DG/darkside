@@ -1,24 +1,30 @@
 # Darkside
 
-*A TUI-kit written in Rust for rust app*
+_A TUI-kit written in Rust for rust app_
 
 ## Why?
 
-Well, I'm just getting started with Rust so I pretty bad at handling Rust-related things such as lifetime or borrowing, so instead of using other TUI library which used struct and other complicated things, I used [`ncurses-rs`](https://github.com/jeaye/ncurses-rs) and I f*cking love it because it's so simple. That's why I tried to make a TUI-kit but keep the same simple API structure and this is the result.
+I fell in love with TUI-app since I started to use i3wm since they are extremely fast and get the work done. This is an attempt to bring that powerful feature of TUI app combined with Rust. I used [`ncurses-rs`](https://github.com/jeaye/ncurses-rs) as a backend for this crate because I'm of the simple, elegant API design of ncurses.
 
-## Supported widgets
-- Text
-- Input
-- List
-- Region
-- Tag
+## Features
+
+- [x] Text
+- [ ] Input
+- [ ] Textarea
+- [x] List
+- [ ] Overflow container (used to contain overflowed widgets and allow scroll)
+- [ ] Menu (dropdown and horizontal)
+- [ ] Text editor with highlighting
+- [ ] Colors support
 
 ## Examples
 
 See [`examples/`](examples/)
 
 ## Author
+
 - [Viet Hung Nguyen](https://github.com/ZeroX-DG)
 
 ## License
+
 - [MIT](LICENSE)
